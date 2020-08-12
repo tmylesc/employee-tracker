@@ -1,6 +1,7 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const cTable = require('console.table');
+const { start } = require("repl");
 
 //Connects to MySQL
 const connection = mysql.createConnection({
@@ -75,7 +76,7 @@ function addDepartment() {
         name: "department",
         message: "What is the department you'd like to add?"
     }).then(answer => {
-        connection.query("INSERT INTO department (name) VALUES (?)", [answer.department], function(err, data) {
+        connection.query("INSERT INTO department (name) VALUES (?)", [answer.department], function(err, department) {
             if (err) throw err;
             console.table("The department has been added");
             startApp();
@@ -92,7 +93,10 @@ function addEmployee() {
 }
 
 function viewDepartments() {
-    startApp();
+    connection.query("SELECT * FROM department", function (err, departments) {
+        console.table(departments);
+        startApp();
+    })
 }
 
 function viewRoles() {
