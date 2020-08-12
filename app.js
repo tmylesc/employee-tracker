@@ -70,9 +70,39 @@ function startApp() {
 }
 
 function addDepartment() {
-    startApp();
+    inquirer.prompt({
+        type: "input",
+        name: "department",
+        message: "What is the department you'd like to add?"
+    }).then(answer => {
+        connection.query("INSERT INTO department (name) VALUES (?)", [answer.department], function(err, data) {
+            if (err) throw err;
+            console.table("The department has been added");
+            startApp();
+        });
+    });
 }
 
 function addRole() {
+    startApp();
+}
+
+function addEmployee() {
+    startApp();
+}
+
+function viewDepartments() {
+    startApp();
+}
+
+function viewRoles() {
+    startApp();
+}
+
+function viewEmployees() {
+    startApp();
+}
+
+function updateRole() {
     startApp();
 }
