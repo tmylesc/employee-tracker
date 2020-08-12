@@ -121,7 +121,10 @@ function viewDepartments() {
 }
 
 function viewRoles() {
-    startApp();
+    connection.query("SELECT * FROM role", function (err, roles) {
+        console.table(roles);
+        startApp();
+    })
 }
 
 function viewEmployees() {
