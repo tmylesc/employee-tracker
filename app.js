@@ -155,7 +155,10 @@ function viewRoles() {
 }
 
 function viewEmployees() {
-    startApp();
+    connection.query("SELECT * FROM employee" , function (err, employees) {
+        console.table(employees);
+        startApp();
+    });
 }
 
 function updateRole() {
