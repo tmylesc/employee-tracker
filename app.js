@@ -110,7 +110,34 @@ function addRole() {
 }
 
 function addEmployee() {
-    startApp();
+    inquirer.prompt([
+        {
+            name: "firstName",
+            type: "input",
+            message: "What is the employee's first name?"
+        },
+        {
+            name: "lastName",
+            type: "input",
+            message: "what is the employee's last name?"
+        },
+        {
+            name: "roleId",
+            type: "number",
+            message: "What is the employee's Role ID?"
+        },
+        {
+            name: "managerId",
+            type: "number",
+            message: "What is the employee's Manager ID?"
+        }
+    ]).then(answers => {
+        connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [answers.firstName, answers.lastName, answers.roleId, answers.managerId], function(err, employee) {
+            if (err) throw err;
+            console.table("The employee has been added!");
+            startApp();
+        });
+    });
 }
 
 function viewDepartments() {
