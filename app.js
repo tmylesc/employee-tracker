@@ -12,12 +12,14 @@ const connection = mysql.createConnection({
     database: "employees_db"
 });
 
+//Connects and starts Inquirer app
 connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
     startApp();
 });
 
+//Begins App with list of first options
 function startApp() {
     console.log("Welcome to the Employee Tracker Database!");
     inquirer.prompt({
@@ -70,6 +72,7 @@ function startApp() {
     });
 }
 
+//Adds a department to the database
 function addDepartment() {
     inquirer.prompt({
         type: "input",
@@ -84,6 +87,7 @@ function addDepartment() {
     });
 }
 
+//Adds a role to the database
 function addRole() {
     inquirer.prompt([
         {
@@ -103,12 +107,13 @@ function addRole() {
         }
     ]). then(answers => {
         connection.query("INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)", [answers.title, answers.salary, answers.id], function (err, role) {
-            console.table(role);
+            console.table("The role has been added!");
         });
         startApp();
     });
 }
 
+//Adds an employee to the database
 function addEmployee() {
     inquirer.prompt([
         {
@@ -140,6 +145,7 @@ function addEmployee() {
     });
 }
 
+//Shows a list of departments in the database
 function viewDepartments() {
     connection.query("SELECT * FROM department", function (err, departments) {
         console.table(departments);
@@ -147,6 +153,7 @@ function viewDepartments() {
     })
 }
 
+//Shows a list of roles in the database
 function viewRoles() {
     connection.query("SELECT * FROM role", function (err, roles) {
         console.table(roles);
@@ -154,6 +161,7 @@ function viewRoles() {
     })
 }
 
+//Shows a list of employees in the database
 function viewEmployees() {
     connection.query("SELECT * FROM employee" , function (err, employees) {
         console.table(employees);
@@ -161,6 +169,23 @@ function viewEmployees() {
     });
 }
 
+//Updates an employee's role
 function updateRole() {
-    startApp();
+    inquirer.prompt([
+        {
+            type: "number",
+            name: "employeeId",
+            message: "Please enter the employee ID of the role you'd like to update."
+        },
+        {
+            type: "number",
+            name: "roleId",
+            message: "Please enter the new Role ID."
+        }
+    ]).then(answers => {
+        connection.query("UPDATE employee SET role_id = ? WHERE id = ?", [answers.roleId, answers.employeeId], function(err, newRole) {
+            console.table("The role has been updated!");
+            startApp();
+        });
+    });
 }
